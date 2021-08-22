@@ -59,4 +59,5 @@ void cp_file(char *src, char *dst)
 	fclose(s);
 	fclose(d);
 
+	return;
 }
