@@ -15,10 +15,12 @@ extern int optind, opterr, optopt;
 int main(int argc, char *argv[])
 {
 	
-	const char *opts = "ah";
-	char path[255] = {0};
+	const char *opts = "ahf";
+	char path[255] = {0};	//массив, в который помещается путь
+	int n = 1;				//переменная для определения кол-ва аргументов
 	int vars;
-	bool prnt_all = false;
+	bool prnt_all = false;	//всё содержимое или нет
+	bool force = false;		//нужен ли листинг содержащихся папок
 
 	while((vars = getopt(argc, argv, opts)) != -1)
 	{
@@ -26,38 +28,37 @@ int main(int argc, char *argv[])
 		{
 			case 'h' :
 			{
-				printf("argc = %d\n", argc);
 				help(argv[0]);
 				return 0;
 			}
 			case 'a' :
 			{
 				prnt_all = true;
+				n = 2;	//кол-во аргументов больше
+				break;
+			}
+			case 'f' :
+			{
+				force = true;
+				n = 2;	//кол-во аргументов больше
 				break;
 			}
 		}
 	}
 
-	getcwd(path, 255);	//получаем путь и заносим его в строчный массив
-	printf("path = %s\n", path);
-	dir_contents(path, prnt_all);
-	/*printf("argc = %d\n", argc);
-	if (argc < 2)
+	if (argv[n] != 0)
 	{
-		printf("no path passed\n");
-		getcwd(path, 255);	//получаем путь и заносим его в строчный массив
-		printf("path = %s\n", path);
-		dir_contents(path, prnt_all);
+		printf("path is entered\n");
+		printf("path = %s\n", argv[n]);
+		dir_contents(argv[n], prnt_all, force);	//запускаем функцию с введенным путём
 	}
 	else
 	{
-		for (int i = 0; i < argc; i++)
-		{
-			printf("argv[%d] = %s\n", i, argv[i]);
-		}
-		dir_contents(argv[argc-1], prnt_all);
-	}*/
-
+		printf("path is not entered\n");
+		getcwd(path, 255);	//получаем путь и заносим его в строчный массив
+		printf("path = %s\n", path);
+		dir_contents(path, prnt_all, force);	//запускаем функцию с текущей директорией
+	}
 
 	return 0;
 }
